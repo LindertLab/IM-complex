@@ -1,0 +1,5 @@
+## Overview
+
+This repository provides workflows for collision cross section (CCS) calculations using the Collidoscope Trajectory Method (TJM). Representative protein structures are generated via vacuum molecular dynamics simulations performed in GROMACS using the GROMOS 43a2 force field, following the standard Collidoscope workflow. Protein complexes are energy-minimized in water, relaxed with a short (1 ns) MD run to ensure proper folding, then transferred to vacuum for a 10 ns NVT equilibration and a 10 ns production run at 300 K. CCS values are computed using He buffer gas from representative trajectory frames.
+
+Physically unrealistic docked structures are filtered using a breadth-first search (BFS)–based algorithm. Docked models with minimum interchain Cα–Cα distances exceeding 25 Å are identified as outliers, where chains are treated as nodes and interchain distances as graph edges. This step removes disconnected or non-physical configurations, ensuring robust and physically meaningful CCS calculations.
