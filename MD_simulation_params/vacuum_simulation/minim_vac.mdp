@@ -1,0 +1,64 @@
+title   = Energy Minimization 
+; define        = -DPOSRES
+
+; RUN PARAMETERS
+integrator  = steep        ; Algorithm (steep = minimization, md = molecular dynanics)
+nsteps      = 5000000      ; Maximum number of (minimization) steps to perform ; 2 * 5000000 fs= 10000 ps = 10NS
+dt          = 0.001     ; 1 fs
+emtol       = 100
+; mode for center of mass motion removal
+comm-mode                = angular
+
+; OUTPUT CONTROL
+nstxout     = 100      ; save coordinates every 2 ps
+nstvout     = 100       ; save velocities every 2 ps
+nstenergy   = 100       ; save energies every 2 ps
+nstlog      = 100       ; update log file every 1 ps
+energygrps  = Protein
+
+; BOND PARAMETERS
+continuation    = no            ; first dynamics run
+constraint_algorithm = lincs    ; holonomic constraints
+constraints     = hbonds     ; all bonds (even heavy atom-H bonds) constrained
+lincs_iter      = 2             ; accuracy of LINCS
+lincs_order     = 4             ; also related to accuracy
+
+; NEIGHBOR-SEARCHING PARAMETERS
+vdw-type    = Cut-off
+nstlist     = 5         ; 10 fs
+ns_type     = simple      ; search neighboring grid cells
+pbc         = xyz
+rlist       = 1       ; short-range neighborlist cutoff (in nm)
+rlistlong   = 1
+
+; OPTIONS FOR ELECTROSTATICS AND VDW
+coulombtype              = cut-off ; Particle Mesh Ewald for long-range electrostatics
+rcoulomb-switch          = 0.6
+rcoulomb                 = 1        ; short-range electrostatic cutoff (in nm)
+rvdw                     = 1        ; short-range van der Waals cutoff (in nm)
+rvdw-switch              = 0.6
+fourierspacing           = 0.16       ; grid spacing for FFT
+epsilon_r                = 1
+epsilon_rf               = 1
+
+; EWALD/PME/PPPM PARAMETERS
+pme_order                = 4          ; cubic interpolation
+
+; TEMPERATURE COUPLING
+tcoupl          = nose-hoover   ;Nose-Hoover (for equilibration)
+tc-grps         = Protein       ; System: Protein
+tau_t           = 0.1           ; time constant, in ps
+ref_t           = 300           ; reference temperature in K
+; Pressure coupling
+pcoupl      = no        ; no pressure coupling in Eq or NVT
+
+; ANNEALING (Not needed)
+;annealing              = single
+;annealing_npoints      = 1
+;annealing_time         = 0
+;annealing_temp         = 300
+
+; VELOCITY GENERATION
+gen_vel     = no       ; assign velocities from Maxwell distribution
+gen_temp    = 300       ; temperature for Maxwell distribution
+gen_seed    = -1        ; generate a random seed

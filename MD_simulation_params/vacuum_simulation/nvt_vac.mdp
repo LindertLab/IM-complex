@@ -1,0 +1,65 @@
+title           = MD mdp equilibration
+
+
+;define        = -DPOSRES
+
+; RUN PARAMETERS
+integrator      = md            ; leap-frog integrator
+nsteps          = 3000000               ; 1 * 300000 = 3000 ps
+dt              = 0.001         ; 1 fs (1fs for systems w/out constraints(vacuum) ; 2fs for constraints)
+emtol           = 100
+comm-mode       = angular
+
+; OUTPUT CONTROL
+;nstxout        = 100           ; save coordinates every 0.2 ps
+nstxtcout       = 20000         ; save coordinates every 20 ps
+;nstvout        = 100           ; save velocities every 0.2 ps
+nstenergy       = 100           ; save energies every 0.2 ps
+nstlog          = 100           ; update log file every 0.2 ps
+energygrps      = Protein
+
+; BOND PARAMETERS
+continuation    = no            ; first dynamics run
+constraint_algorithm = lincs    ; holonomic constraints
+constraints     = hbonds        ; all bonds (even heavy atom-H bonds) constrained
+lincs_iter      = 2             ; accuracy of LINCS
+lincs_order     = 4             ; also related to accuracy
+
+; NEIGHBORSEARCHING PARAMETERS
+ns_type         = simple                ; search neighboring grid cels
+nstlist         = 5             ; 10 fs
+rlist           = 1.0           ; short-range neighborlist cutoff (in nm)
+rlistlong       = 1.0
+
+; OPTIONS FOR ELECTROSTATICS
+coulombtype     = cut-off       ; Cut-off OR PME: Particle Mesh Ewald for long-range electrostatics
+pme_order       = 4             ; cubic interpolation
+cutoff-scheme   = Verlet
+rcoulomb        = 1             ; short-range electrostatic cutoff (in nm)
+rcoulomb-switch = 0.8
+vdwtype         = cut-off
+rvdw            = 1.0           ; short-range van der Waals cutoff (in nm)
+rvdw-switch     = 0.8
+fourierspacing  = 0.16
+epsilon_r       = 1
+epsilon_rf      = 1
+
+; TEMPERATURE COUPLING (ON)
+tcoupl          = V-rescale     ; modified Berendsen thermostat (for MD)
+tc-grps         = Protein       ; coupling groups
+tau_t           = 0.1           ; time constant, in ps
+ref_t           = 300           ; reference temperature, one for each group, in K
+
+; PRESSURE COUPLING (OFF)
+pcoupl          = no            ; no pressure coupling in NVT
+
+; PERIODIC BOUNDARY CONDITIONS
+pbc             = xyz           ; 3-D PBC
+
+; DISPERSION CORRECTION
+DispCorr        = EnerPres      ; account for cut-off vdW scheme
+
+; VELOCITY GENERATION
+gen_vel         = yes           ; assign velocities from Maxwell distribution
+gen_temp        = 300           ; temperature for Maxwell distribution
+gen_seed        = -1            ; generate a random seed

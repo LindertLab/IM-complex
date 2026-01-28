@@ -1,0 +1,6 @@
+gmx_gpu grompp -f minim_vac.mdp -c 1ns_newbox.gro -p topol.top -o pdb_em.tpr -maxwarn 3
+gmx_gpu mdrun -deffnm pdb_em -v -nb gpu
+gmx_gpu grompp -f nvt_vac.mdp -c pdb_em.gro -p topol.top -o pdb_equil.tpr -maxwarn 3
+gmx_gpu mdrun -deffnm pdb_equil -v -nb gpu
+gmx_gpu grompp -f md_vac.mdp -c pdb_equil.gro -p topol.top -o pdb_ps.tpr -maxwarn 3
+gmx_gpu mdrun -deffnm pdb_ps -v -nb gpu 
